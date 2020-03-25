@@ -25,7 +25,7 @@ dTesting<-read.csv("https://d396qusza40orc.cloudfront.net/predmachlearn/pml-test
 
 # 3. Cleaning data
 Based on exploring the dataset, the conclusion was made that many of the columns have large amount of missing data. Such columns were excluded.  
-Columns with date, time, user information was also excluded.
+Columns with date, time, user information were also excluded.
 
 ```{r DataCleaning}
 set.seed(8524)
@@ -125,14 +125,14 @@ plot(varImp(model.5), top=15, main="Most important variables")
 :::
 ::::::
 
-# 7. Prediction on the test data
+# 7. Prediction on the test data (results hidden)
 
 ```{r Solution_df}
 solution<- data.frame(ID=dTesting$X, Prediction=predict(model.6,dTesting))
 ```
 :::::: {style="display:flex;"}
 ::: {style="width:48%;"}
-```{r Solution_kable1}
+```{r Solution_kable1, results=F}
    knitr::kable(solution[1:10,], row.names = F)
 ```
 :::
@@ -141,11 +141,13 @@ solution<- data.frame(ID=dTesting$X, Prediction=predict(model.6,dTesting))
 :::
 
 ::: {style="width:48%;"}
-```{r Solution_kable2}
+```{r Solution_kable2, results=F}
    knitr::kable(solution[11:20,], row.names = F)
 ```
 :::
 ::::::
+
+----------------------------------------------
 
 # Appendix: Assignment info
 

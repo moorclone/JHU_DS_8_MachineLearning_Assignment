@@ -379,10 +379,10 @@ summary {
 <pre class="r"><code>dTraining&lt;-read.csv(&quot;https://d396qusza40orc.cloudfront.net/predmachlearn/pml-training.csv&quot;)
 dTesting&lt;-read.csv(&quot;https://d396qusza40orc.cloudfront.net/predmachlearn/pml-testing.csv&quot;)</code></pre>
 </div>
-<div id="selecting-data-columns" class="section level1">
-<h1>3. Selecting data columns</h1>
+<div id="cleaning-data" class="section level1">
+<h1>3. Cleaning data</h1>
 <p>Based on exploring the dataset, the conclusion was made that many of the columns have large amount of missing data. Such columns were excluded.<br />
-Columns with date, time, user information was also excluded.</p>
+Columns with date, time, user information were also excluded.</p>
 <pre class="r"><code>set.seed(8524)
 
 #Creating training dataset
@@ -511,120 +511,21 @@ ggplot(as.data.frame(confmat.rf$table),aes(x=Prediction,y=Reference, fill=Freq))
 </div>
 </div>
 </div>
-<div id="prediction-on-the-test-data" class="section level1">
-<h1>7. Prediction on the test data</h1>
+<div id="prediction-on-the-test-data-results-hidden" class="section level1">
+<h1>7. Prediction on the test data (results hidden)</h1>
 <pre class="r"><code>solution&lt;- data.frame(ID=dTesting$X, Prediction=predict(model.6,dTesting))</code></pre>
 <div style="display:flex;">
 <div style="width:48%;">
 <pre class="r"><code>   knitr::kable(solution[1:10,], row.names = F)</code></pre>
-<table>
-<thead>
-<tr class="header">
-<th align="right">ID</th>
-<th align="left">Prediction</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="right">1</td>
-<td align="left">B</td>
-</tr>
-<tr class="even">
-<td align="right">2</td>
-<td align="left">A</td>
-</tr>
-<tr class="odd">
-<td align="right">3</td>
-<td align="left">B</td>
-</tr>
-<tr class="even">
-<td align="right">4</td>
-<td align="left">A</td>
-</tr>
-<tr class="odd">
-<td align="right">5</td>
-<td align="left">A</td>
-</tr>
-<tr class="even">
-<td align="right">6</td>
-<td align="left">E</td>
-</tr>
-<tr class="odd">
-<td align="right">7</td>
-<td align="left">D</td>
-</tr>
-<tr class="even">
-<td align="right">8</td>
-<td align="left">B</td>
-</tr>
-<tr class="odd">
-<td align="right">9</td>
-<td align="left">A</td>
-</tr>
-<tr class="even">
-<td align="right">10</td>
-<td align="left">A</td>
-</tr>
-</tbody>
-</table>
 </div>
 <div style="width:4%;">
 
 </div>
 <div style="width:48%;">
 <pre class="r"><code>   knitr::kable(solution[11:20,], row.names = F)</code></pre>
-<table>
-<thead>
-<tr class="header">
-<th align="right">ID</th>
-<th align="left">Prediction</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="right">11</td>
-<td align="left">B</td>
-</tr>
-<tr class="even">
-<td align="right">12</td>
-<td align="left">C</td>
-</tr>
-<tr class="odd">
-<td align="right">13</td>
-<td align="left">B</td>
-</tr>
-<tr class="even">
-<td align="right">14</td>
-<td align="left">A</td>
-</tr>
-<tr class="odd">
-<td align="right">15</td>
-<td align="left">E</td>
-</tr>
-<tr class="even">
-<td align="right">16</td>
-<td align="left">E</td>
-</tr>
-<tr class="odd">
-<td align="right">17</td>
-<td align="left">A</td>
-</tr>
-<tr class="even">
-<td align="right">18</td>
-<td align="left">B</td>
-</tr>
-<tr class="odd">
-<td align="right">19</td>
-<td align="left">B</td>
-</tr>
-<tr class="even">
-<td align="right">20</td>
-<td align="left">B</td>
-</tr>
-</tbody>
-</table>
 </div>
 </div>
+<hr />
 </div>
 <div id="appendix-assignment-info" class="section level1">
 <h1>Appendix: Assignment info</h1>
