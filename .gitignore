@@ -1,0 +1,9 @@
+analysis_files/**
+analysis_cache/**
+hooks/**
+info/**
+objects/**
+refs/**
+config
+description
+HEAD
