@@ -23,11 +23,11 @@ dTraining<-read.csv("https://d396qusza40orc.cloudfront.net/predmachlearn/pml-tra
 dTesting<-read.csv("https://d396qusza40orc.cloudfront.net/predmachlearn/pml-testing.csv")
 ```
 
-# 3. Selecting data columns
+# 3. Cleaning data
 Based on exploring the dataset, the conclusion was made that many of the columns have large amount of missing data. Such columns were excluded.  
 Columns with date, time, user information was also excluded.
 
-```{r DataTransforming}
+```{r DataCleaning}
 set.seed(8524)
 
 #Creating training dataset
@@ -53,8 +53,9 @@ training.summary<-
 knitr::kable(training.summary)
 ```
 
-# 5. ML Models
-training based on multiple methods, which 
+# 4. ML Models
+Training based on multiple methods, and selecting the most accurate one.  
+**The methods tried are**: Support Vector Machines *(svm)*, Bagged CART *(treebag)*, Stochastic Gradient Boosting *(gbm)*, Linear Discriminant Analysis *(lda)*, Classification and Regression Trees (CART) *(rpart)*, Random Forest *(rf)*
 
 ```{r ML-settings, include=F}
 library(caret)
@@ -79,8 +80,8 @@ pred6<-predict(model.6,validation) ; pred6.i<-predict(model.6,training)
 ```
 
 
-# 6. Cross validation
-
+# 5. Cross validation
+The In sample accuracy is expected to be higher (so the error is lower), compared to the out of sample accuracy. This phenomenon can be successfully observed below: the out of sample accuracy is either lower or similar to the in sample accuracy.
 ```{r Accuracy}
 INaccuracy<- c(
       svm=confusionMatrix(pred1.i,training$classe)$overall['Accuracy'],
@@ -98,13 +99,13 @@ OUTaccuracy<- c(
       rpart=confusionMatrix(pred5,validation$classe)$overall['Accuracy'],
       rf=confusionMatrix(pred6,validation$classe)$overall['Accuracy']
 )
-knitr::kable(data.frame(InSampleAccuracy=INaccuracy,OutOfSampleAccuracy=OUTaccuracy))
+knitr::kable(data.frame(Model=names(OUTaccuracy),In.Sample.Accuracy=paste0(round(INaccuracy*100,3),"%"),Out.of.Sample.Accuracy=paste0(round(OUTaccuracy*100,3),"%"), Out.of.Sample.Error=paste0(round((1-OUTaccuracy)*100,3),"%")))
 
 confmat.rf<-confusionMatrix(pred6,validation$classe)
 
 ```
 
-# 7. Analysis of the most accurate model (random forest)
+# 6. Analysis of the most accurate model (random forest)
 
 :::::: {style="display:flex;"}
 ::: {style="width:48%; text-align:center;"}
@@ -146,7 +147,7 @@ solution<- data.frame(ID=dTesting$X, Prediction=predict(model.6,dTesting))
 :::
 ::::::
 
-# 00. Assignment info
+# Appendix: Assignment info
 
 One thing that people regularly do is quantify *how much* of a particular activity they do, but they rarely quantify *how well* they do it. In this project, your goal will be to use data from accelerometers on the belt, forearm, arm, and dumbell of 6 participants.
 

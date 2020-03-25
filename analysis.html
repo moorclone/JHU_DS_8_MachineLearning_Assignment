@@ -407,8 +407,9 @@ validation&lt;-validation[,-(1:7)] ;         training&lt;-training[,-(1:7)]</cod
 knitr::kable(training.summary)</code></pre>
 </div>
 <div id="ml-models" class="section level1">
-<h1>5. ML Models</h1>
-<p>training based on multiple methods, which</p>
+<h1>4. ML Models</h1>
+<p>Training based on multiple methods, and selecting the most accurate one.<br />
+<strong>The methods tried are</strong>: Support Vector Machines <em>(svm)</em>, Bagged CART <em>(treebag)</em>, Stochastic Gradient Boosting <em>(gbm)</em>, Linear Discriminant Analysis <em>(lda)</em>, Classification and Regression Trees (CART) <em>(rpart)</em>, Random Forest <em>(rf)</em></p>
 <pre class="r"><code>model.1  &lt;- svm(classe ~ . , data=training, trControl=trCntrl)
 model.2 &lt;- train(classe ~ . , data=training, method=&quot;treebag&quot;, trControl=trCntrl)
 invisible(capture.output(model.3 &lt;- train(classe ~ . , data=training, method=&quot;gbm&quot;, trControl=trCntrl)))
@@ -423,7 +424,8 @@ pred5&lt;-predict(model.5,validation) ; pred5.i&lt;-predict(model.5,training)
 pred6&lt;-predict(model.6,validation) ; pred6.i&lt;-predict(model.6,training)</code></pre>
 </div>
 <div id="cross-validation" class="section level1">
-<h1>6. Cross validation</h1>
+<h1>5. Cross validation</h1>
+<p>The In sample accuracy is expected to be higher (so the error is lower), compared to the out of sample accuracy. This phenomenon can be successfully observed below: the out of sample accuracy is either lower or similar to the in sample accuracy.</p>
 <pre class="r"><code>INaccuracy&lt;- c(
       svm=confusionMatrix(pred1.i,training$classe)$overall[&#39;Accuracy&#39;],
       treebag=confusionMatrix(pred2.i,training$classe)$overall[&#39;Accuracy&#39;],
@@ -440,53 +442,60 @@ OUTaccuracy&lt;- c(
       rpart=confusionMatrix(pred5,validation$classe)$overall[&#39;Accuracy&#39;],
       rf=confusionMatrix(pred6,validation$classe)$overall[&#39;Accuracy&#39;]
 )
-knitr::kable(data.frame(InSampleAccuracy=INaccuracy,OutOfSampleAccuracy=OUTaccuracy))
+knitr::kable(data.frame(Model=names(OUTaccuracy),In.Sample.Accuracy=paste0(round(INaccuracy*100,3),&quot;%&quot;),Out.of.Sample.Accuracy=paste0(round(OUTaccuracy*100,3),&quot;%&quot;), Out.of.Sample.Error=paste0(round((1-OUTaccuracy)*100,3),&quot;%&quot;)))
 
 confmat.rf&lt;-confusionMatrix(pred6,validation$classe)</code></pre>
 <table>
 <thead>
 <tr class="header">
-<th></th>
-<th align="right">InSampleAccuracy</th>
-<th align="right">OutOfSampleAccuracy</th>
+<th align="left">Model</th>
+<th align="left">In.Sample.Accuracy</th>
+<th align="left">Out.of.Sample.Accuracy</th>
+<th align="left">Out.of.Sample.Error</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>svm.Accuracy</td>
-<td align="right">0.9427304</td>
-<td align="right">0.9384755</td>
+<td align="left">svm.Accuracy</td>
+<td align="left">94.273%</td>
+<td align="left">93.848%</td>
+<td align="left">6.152%</td>
 </tr>
 <tr class="even">
-<td>treebag.Accuracy</td>
-<td align="right">1.0000000</td>
-<td align="right">0.9860034</td>
+<td align="left">treebag.Accuracy</td>
+<td align="left">100%</td>
+<td align="left">98.6%</td>
+<td align="left">1.4%</td>
 </tr>
 <tr class="odd">
-<td>gbm.Accuracy</td>
-<td align="right">0.9749252</td>
-<td align="right">0.9610311</td>
+<td align="left">gbm.Accuracy</td>
+<td align="left">97.493%</td>
+<td align="left">96.103%</td>
+<td align="left">3.897%</td>
 </tr>
 <tr class="even">
-<td>lda.Accuracy</td>
-<td align="right">0.7021979</td>
-<td align="right">0.7022455</td>
+<td align="left">lda.Accuracy</td>
+<td align="left">70.22%</td>
+<td align="left">70.225%</td>
+<td align="left">29.775%</td>
 </tr>
 <tr class="odd">
-<td>rpart.Accuracy</td>
-<td align="right">0.4953049</td>
-<td align="right">0.4971302</td>
+<td align="left">rpart.Accuracy</td>
+<td align="left">49.53%</td>
+<td align="left">49.713%</td>
+<td align="left">50.287%</td>
 </tr>
 <tr class="even">
-<td>rf.Accuracy</td>
-<td align="right">1.0000000</td>
-<td align="right">0.9916423</td>
+<td align="left">rf.Accuracy</td>
+<td align="left">100%</td>
+<td align="left">99.164%</td>
+<td align="left">0.836%</td>
 </tr>
 </tbody>
 </table>
 </div>
 <div id="analysis-of-the-most-accurate-model-random-forest" class="section level1">
-<h1>7. Analysis of the most accurate model (random forest)</h1>
+<h1>6. Analysis of the most accurate model (random forest)</h1>
 <div style="display:flex;">
 <div style="width:48%; text-align:center;">
 <pre class="r" style="text-align:left;"><code>library(ggplot2)
@@ -617,8 +626,8 @@ ggplot(as.data.frame(confmat.rf$table),aes(x=Prediction,y=Reference, fill=Freq))
 </div>
 </div>
 </div>
-<div id="assignment-info" class="section level1">
-<h1>00. Assignment info</h1>
+<div id="appendix-assignment-info" class="section level1">
+<h1>Appendix: Assignment info</h1>
 <p>One thing that people regularly do is quantify <em>how much</em> of a particular activity they do, but they rarely quantify <em>how well</em> they do it. In this project, your goal will be to use data from accelerometers on the belt, forearm, arm, and dumbell of 6 participants.</p>
 <div id="review-criteria" class="section level2">
 <h2>Review Criteria</h2>
